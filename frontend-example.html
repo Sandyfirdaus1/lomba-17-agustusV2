@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Peserta Lomba 17 Agustus</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 30px;
+        background: #f8f9fa;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ff6b6b;
+      }
+
+      .stat-label {
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .filter-select {
+        padding: 10px 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        min-width: 200px;
+      }
+
+      .search-input {
+        padding: 10px 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .peserta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+      }
+
+      .peserta-card {
+        background: white;
+        border: 2px solid #f1f2f6;
+        border-radius: 15px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .peserta-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        border-color: #ff6b6b;
+      }
+
+      .peserta-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .peserta-nama {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+
+      .peserta-status {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .status-terdaftar {
+        background: #ffeaa7;
+        color: #d63031;
+      }
+
+      .status-diterima {
+        background: #55a3ff;
+        color: white;
+      }
+
+      .status-ditolak {
+        background: #ff7675;
+        color: white;
+      }
+
+      .peserta-info {
+        margin-bottom: 15px;
+      }
+
+      .info-item {
+        display: flex;
+        margin-bottom: 8px;
+        align-items: center;
+      }
+
+      .info-label {
+        font-weight: bold;
+        color: #666;
+        min-width: 80px;
+        margin-right: 10px;
+      }
+
+      .info-value {
+        color: #2c3e50;
+      }
+
+      .peserta-lomba {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 50px;
+        color: #666;
+      }
+
+      .error {
+        background: #ff7675;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .refresh-btn {
+        background: #00b894;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .refresh-btn:hover {
+        background: #00a085;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .filters {
+          flex-direction: column;
+        }
+
+        .peserta-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏆 Lomba 17 Agustus</h1>
+        <p>Daftar Peserta yang Telah Mendaftar</p>
+      </div>
+
+      <div class="stats" id="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalPeserta">-</div>
+          <div class="stat-label">Total Peserta</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pesertaTerdaftar">-</div>
+          <div class="stat-label">Terdaftar</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pesertaDiterima">-</div>
+          <div class="stat-label">Diterima</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pesertaDitolak">-</div>
+          <div class="stat-label">Ditolak</div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="filters">
+          <select class="filter-select" id="filterLomba">
+            <option value="">Semua Jenis Lomba</option>
+            <option value="Lomba Makan Kerupuk">Lomba Makan Kerupuk</option>
+            <option value="Lomba Balap Karung">Lomba Balap Karung</option>
+            <option value="Lomba Tarik Tambang">Lomba Tarik Tambang</option>
+            <option value="Lomba Panjat Pinang">Lomba Panjat Pinang</option>
+            <option value="Lomba Bakiak">Lomba Bakiak</option>
+          </select>
+
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Cari nama atau email..."
+          />
+
+          <button class="refresh-btn" onclick="loadPeserta()">
+            🔄 Refresh
+          </button>
+        </div>
+
+        <div id="pesertaContainer">
+          <div class="loading">Memuat data peserta...</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:5000/api/peserta";
+      let allPeserta = [];
+
+      // Load data saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", () => {
+        loadPeserta();
+        loadStats();
+      });
+
+      // Filter dan search
+      document
+        .getElementById("filterLomba")
+        .addEventListener("change", filterPeserta);
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", filterPeserta);
+
+      async function loadPeserta() {
+        try {
+          const response = await fetch(API_BASE);
+          const result = await response.json();
+
+          if (result.success) {
+            allPeserta = result.data;
+            displayPeserta(allPeserta);
+            updateStats();
+          } else {
+            showError("Gagal memuat data peserta");
+          }
+        } catch (error) {
+          showError("Error: " + error.message);
+        }
+      }
+
+      async function loadStats() {
+        try {
+          const response = await fetch(`${API_BASE}/stats/summary`);
+          const result = await response.json();
+
+          if (result.success) {
+            updateStats(result.data);
+          }
+        } catch (error) {
+          console.log("Stats tidak bisa dimuat:", error.message);
+        }
+      }
+
+      function updateStats(data = null) {
+        if (data) {
+          document.getElementById("totalPeserta").textContent =
+            data.totalPeserta || 0;
+
+          const statusCounts = data.statusCounts || [];
+          const terdaftar =
+            statusCounts.find((s) => s._id === "Terdaftar")?.count || 0;
+          const diterima =
+            statusCounts.find((s) => s._id === "Diterima")?.count || 0;
+          const ditolak =
+            statusCounts.find((s) => s._id === "Ditolak")?.count || 0;
+
+          document.getElementById("pesertaTerdaftar").textContent = terdaftar;
+          document.getElementById("pesertaDiterima").textContent = diterima;
+          document.getElementById("pesertaDitolak").textContent = ditolak;
+        } else {
+          // Update dari data yang sudah ada
+          const total = allPeserta.length;
+          const terdaftar = allPeserta.filter(
+            (p) => p.status === "Terdaftar"
+          ).length;
+          const diterima = allPeserta.filter(
+            (p) => p.status === "Diterima"
+          ).length;
+          const ditolak = allPeserta.filter(
+            (p) => p.status === "Ditolak"
+          ).length;
+
+          document.getElementById("totalPeserta").textContent = total;
+          document.getElementById("pesertaTerdaftar").textContent = terdaftar;
+          document.getElementById("pesertaDiterima").textContent = diterima;
+          document.getElementById("pesertaDitolak").textContent = ditolak;
+        }
+      }
+
+      function filterPeserta() {
+        const filterLomba = document.getElementById("filterLomba").value;
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+
+        let filtered = allPeserta;
+
+        // Filter berdasarkan jenis lomba
+        if (filterLomba) {
+          filtered = filtered.filter((p) => p.jenisLomba === filterLomba);
+        }
+
+        // Filter berdasarkan search
+        if (searchTerm) {
+          filtered = filtered.filter(
+            (p) =>
+              p.nama.toLowerCase().includes(searchTerm) ||
+              p.email.toLowerCase().includes(searchTerm)
+          );
+        }
+
+        displayPeserta(filtered);
+      }
+
+      function displayPeserta(pesertaList) {
+        const container = document.getElementById("pesertaContainer");
+
+        if (pesertaList.length === 0) {
+          container.innerHTML =
+            '<div class="loading">Tidak ada peserta yang ditemukan</div>';
+          return;
+        }
+
+        const html = pesertaList
+          .map(
+            (peserta) => `
+                <div class="peserta-card">
+                    <div class="peserta-header">
+                        <div class="peserta-nama">${peserta.nama}</div>
+                        <div class="peserta-status status-${peserta.status.toLowerCase()}">${
+              peserta.status
+            }</div>
+                    </div>
+                    
+                    <div class="peserta-info">
+                        <div class="info-item">
+                            <span class="info-label">📧</span>
+                            <span class="info-value">${peserta.email}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">📱</span>
+                            <span class="info-value">${peserta.noTelepon}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">📍</span>
+                            <span class="info-value">${peserta.alamat}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">📅</span>
+                            <span class="info-value">${new Date(
+                              peserta.tanggalDaftar
+                            ).toLocaleDateString("id-ID")}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="peserta-lomba">${peserta.jenisLomba}</div>
+                </div>
+            `
+          )
+          .join("");
+
+        container.innerHTML = html;
+      }
+
+      function showError(message) {
+        const container = document.getElementById("pesertaContainer");
+        container.innerHTML = `<div class="error">${message}</div>`;
+      }
+
+      // Auto refresh setiap 30 detik
+      setInterval(() => {
+        loadPeserta();
+      }, 30000);
+    </script>
+  </body>
+</html>
