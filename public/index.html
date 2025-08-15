@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lomba 17 Agustus - Backend API</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .container {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #ffd700;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .status {
+        background: rgba(0, 255, 0, 0.2);
+        padding: 15px 30px;
+        border-radius: 25px;
+        margin-bottom: 30px;
+        border: 2px solid #00ff00;
+      }
+
+      .endpoints {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+      }
+
+      .endpoint {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 10px 20px;
+        margin: 10px 0;
+        border-radius: 10px;
+        font-family: monospace;
+        font-size: 0.9rem;
+      }
+
+      .info {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-top: 20px;
+      }
+
+      .deploy-info {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">🏆</div>
+      <h1>Lomba 17 Agustus</h1>
+      <div class="subtitle">Backend API Server</div>
+
+      <div class="status">✅ Server Running Successfully</div>
+
+      <div class="endpoints">
+        <h3>Available API Endpoints:</h3>
+        <div class="endpoint">GET / - Welcome Message</div>
+        <div class="endpoint">GET /api/peserta - All Participants</div>
+        <div class="endpoint">POST /api/peserta - Register New Participant</div>
+        <div class="endpoint">GET /api/peserta/stats/summary - Statistics</div>
+        <div class="endpoint">GET /health - Health Check</div>
+      </div>
+
+      <div class="info">
+        <p>
+          🌐 <strong>Public Access:</strong> All participants data can be
+          accessed by anyone
+        </p>
+        <p>📱 <strong>Mobile Friendly:</strong> Accessible from any device</p>
+        <p>⚡ <strong>Real-time:</strong> Data updates automatically</p>
+      </div>
+
+      <div class="deploy-info">
+        <p>🚀 <strong>Deployed on Vercel</strong></p>
+        <p>📊 <strong>Database:</strong> MongoDB Atlas</p>
+        <p>🔄 <strong>Auto-deploy:</strong> On every GitHub push</p>
+      </div>
+    </div>
+  </body>
+</html>

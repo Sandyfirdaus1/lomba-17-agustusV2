@@ -10,6 +10,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from public folder
+app.use(express.static(path.join(__dirname, "public")));
+
 // Import routes
 const pesertaRoutes = require("./routes/peserta");
 
@@ -59,6 +62,7 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`📱 API available at: http://localhost:${PORT}/api/peserta`);
     console.log(`🌐 Frontend can access: http://localhost:${PORT}/api/peserta`);
     console.log(`🏥 Health check: http://localhost:${PORT}/health`);
+    console.log(`📄 Static files: http://localhost:${PORT}/`);
 
     // Connect to database
     connectToMongoDB();
