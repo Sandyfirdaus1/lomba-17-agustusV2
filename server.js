@@ -19,7 +19,21 @@ app.use("/api/peserta", pesertaRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Lomba 17 Agustus API" });
+  res.json({
+    message: "Welcome to Lomba 17 Agustus API",
+    status: "running",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
+
+// Health check endpoint untuk Railway
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 // Connect to MongoDB with fallback
@@ -53,10 +67,11 @@ const connectToMongoDB = async () => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📱 API available at: http://localhost:${PORT}/api/peserta`);
   console.log(`🌐 Frontend can access: http://localhost:${PORT}/api/peserta`);
+  console.log(`🏥 Health check: http://localhost:${PORT}/health`);
 
   // Connect to database
   connectToMongoDB();
