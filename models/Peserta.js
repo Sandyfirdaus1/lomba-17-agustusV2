@@ -19,6 +19,12 @@ const pesertaSchema = new mongoose.Schema(
       required: [true, "Nomor telepon wajib diisi"],
       trim: true,
     },
+    usia: {
+      type: Number,
+      required: [true, "Usia wajib diisi"],
+      min: [1, "Usia minimal 1 tahun"],
+      max: [120, "Usia maksimal 120 tahun"],
+    },
     alamat: {
       type: String,
       required: [true, "Alamat wajib diisi"],
@@ -28,11 +34,15 @@ const pesertaSchema = new mongoose.Schema(
       type: String,
       required: [true, "Jenis lomba wajib dipilih"],
       enum: [
-        "Lomba Makan Kerupuk",
-        "Lomba Balap Karung",
-        "Lomba Tarik Tambang",
-        "Lomba Panjat Pinang",
-        "Lomba Bakiak",
+        "Balap Karung",
+        "Makan Kerupuk",
+        "Balap Kelereng",
+        "Memasukkan Paku ke Botol",
+        "Tarik Tambang (Tim)",
+        "Bakiak (Tim)",
+        "Panjat Pinang",
+        "Lempar Cincin",
+        "Fashion Show Merah Putih",
       ],
     },
     tanggalDaftar: {
@@ -41,12 +51,69 @@ const pesertaSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Terdaftar", "Diterima", "Ditolak"],
-      default: "Terdaftar",
+      enum: [
+        "Diskualifikasi",
+        "Juara 1",
+        "Juara 2",
+        "Juara 3",
+        "Lolos ke Babak Selanjutnya",
+      ],
+      default: "Lolos ke Babak Selanjutnya",
     },
     catatan: {
       type: String,
       trim: true,
+    },
+    // Field baru untuk sistem turnamen
+    babak: {
+      type: String,
+      enum: ["Penyisihan", "Perempat Final", "Semi Final", "Final"],
+      default: "Penyisihan",
+    },
+    skor: {
+      type: Number,
+      default: 0,
+    },
+    waktuPenyelesaian: {
+      type: Number, // dalam detik
+      default: 0,
+    },
+    ranking: {
+      type: Number,
+      default: 0,
+    },
+    alasanDiskualifikasi: {
+      type: String,
+      trim: true,
+    },
+    tanggalDiskualifikasi: {
+      type: Date,
+    },
+    juara: {
+      type: String,
+      enum: ["", "Juara 1", "Juara 2", "Juara 3"],
+      default: "",
+    },
+    hadiah: {
+      type: String,
+      trim: true,
+    },
+    catatanJuri: {
+      type: String,
+      trim: true,
+    },
+    // Field untuk tracking progress
+    isLolos: {
+      type: Boolean,
+      default: false,
+    },
+    isDiskualifikasi: {
+      type: Boolean,
+      default: false,
+    },
+    isJuara: {
+      type: Boolean,
+      default: false,
     },
   },
   {

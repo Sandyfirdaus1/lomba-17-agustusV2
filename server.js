@@ -7,7 +7,14 @@ require("dotenv").config({ path: "./config.env" });
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -20,6 +27,16 @@ app.use("/api/peserta", pesertaRoutes);
 // Basic route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Lomba 17 Agustus API" });
+});
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || "development",
+  });
 });
 
 // Connect to MongoDB with fallback
