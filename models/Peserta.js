@@ -52,13 +52,14 @@ const pesertaSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
+        "Terdaftar",
         "Diskualifikasi",
         "Juara 1",
         "Juara 2",
         "Juara 3",
         "Lolos ke Babak Selanjutnya",
       ],
-      default: "Lolos ke Babak Selanjutnya",
+      default: "Terdaftar",
     },
     catatan: {
       type: String,
