@@ -216,9 +216,33 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     if (error.code === 11000) {
+      // Check if it's a duplicate name + lomba combination
+      if (
+        error.keyPattern &&
+        error.keyPattern.nama &&
+        error.keyPattern.jenisLomba
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: `Nama "${req.body.nama}" sudah terdaftar untuk lomba "${req.body.jenisLomba}"`,
+          duplicateField: "nama",
+          duplicateValue: req.body.nama,
+          duplicateLomba: req.body.jenisLomba,
+        });
+      }
+      // Check if it's a duplicate email
+      if (error.keyPattern && error.keyPattern.email) {
+        return res.status(400).json({
+          success: false,
+          message: "Email sudah terdaftar sebelumnya",
+          duplicateField: "email",
+          duplicateValue: req.body.email,
+        });
+      }
+      // Generic duplicate error
       return res.status(400).json({
         success: false,
-        message: "Email sudah terdaftar sebelumnya",
+        message: "Data sudah terdaftar sebelumnya",
       });
     }
 
