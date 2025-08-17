@@ -9,7 +9,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -26,7 +26,11 @@ app.use("/api/peserta", pesertaRoutes);
 
 // Basic route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Lomba 17 Agustus API" });
+  res.json({
+    message: "Welcome to Lomba 17 Agustus API",
+    status: "running",
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Health check endpoint
@@ -36,6 +40,8 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV || "development",
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
 
@@ -70,11 +76,20 @@ const connectToMongoDB = async () => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📱 API available at: http://localhost:${PORT}/api/peserta`);
-  console.log(`🌐 Frontend can access: http://localhost:${PORT}/api/peserta`);
 
-  // Connect to database
+// For Vercel deployment, don't call app.listen() directly
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on port ${PORT}`);
+    console.log(`📱 API available at: http://localhost:${PORT}/api/peserta`);
+    console.log(`🌐 Frontend can access: http://localhost:${PORT}/api/peserta`);
+
+    // Connect to database
+    connectToMongoDB();
+  });
+} else {
+  // For production (Vercel), just connect to database
   connectToMongoDB();
-});
+}
+
+module.exports = app;
