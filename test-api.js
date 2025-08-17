@@ -1,17 +1,20 @@
 // File test sederhana untuk API
 // Bisa dijalankan dengan: node test-api.js
 
-const testData = {
-  nama: "Test User",
-  email: "test@example.com",
-  noTelepon: "08123456789",
-  alamat: "Jl. Test No. 1, Jakarta",
-  jenisLomba: "Lomba Makan Kerupuk",
-  catatan: "Peserta test untuk demo",
-};
-
 console.log("Data test untuk API:");
-console.log(JSON.stringify(testData, null, 2));
+console.log(
+  JSON.stringify(
+    {
+      nama: "Test User",
+      noTelepon: "08123456789",
+      usia: 25,
+      jenisLomba: "Makan Kerupuk",
+      catatan: "Peserta test untuk demo",
+    },
+    null,
+    2
+  )
+);
 
 console.log("\nEndpoint yang tersedia:");
 console.log("1. GET /api/peserta - Lihat semua peserta");

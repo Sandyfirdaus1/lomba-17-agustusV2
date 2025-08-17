@@ -48,16 +48,7 @@ router.get("/lomba/:jenisLomba", async (req, res) => {
 // POST - Quick action untuk turnamen (harus di atas /:id)
 router.post("/:id/action", async (req, res) => {
   try {
-    const {
-      action,
-      babak,
-      skor,
-      waktuPenyelesaian,
-      ranking,
-      alasanDiskualifikasi,
-      hadiah,
-      catatanJuri,
-    } = req.body;
+    const { action, alasanDiskualifikasi, hadiah, catatanJuri } = req.body;
 
     console.log("Action received:", action); // Debug log
     console.log("Request body:", req.body); // Debug log
@@ -72,11 +63,6 @@ router.post("/:id/action", async (req, res) => {
           isDiskualifikasi: false,
           isJuara: false,
         };
-        if (babak) updateData.babak = babak;
-        if (skor !== undefined) updateData.skor = skor;
-        if (waktuPenyelesaian !== undefined)
-          updateData.waktuPenyelesaian = waktuPenyelesaian;
-        if (ranking !== undefined) updateData.ranking = ranking;
         if (catatanJuri) updateData.catatanJuri = catatanJuri;
         break;
 
@@ -173,18 +159,16 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     // Validate required fields
-    const { nama, email, noTelepon, usia, alamat, jenisLomba } = req.body;
+    const { nama, noTelepon, usia, jenisLomba } = req.body;
 
-    if (!nama || !email || !noTelepon || !usia || !alamat || !jenisLomba) {
+    if (!nama || !noTelepon || !usia || !jenisLomba) {
       return res.status(400).json({
         success: false,
         message: "Semua field wajib diisi",
         missingFields: {
           nama: !nama ? "Nama wajib diisi" : null,
-          email: !email ? "Email wajib diisi" : null,
           noTelepon: !noTelepon ? "Nomor telepon wajib diisi" : null,
           usia: !usia ? "Usia wajib diisi" : null,
-          alamat: !alamat ? "Alamat wajib diisi" : null,
           jenisLomba: !jenisLomba ? "Jenis lomba wajib dipilih" : null,
         },
       });
@@ -195,15 +179,6 @@ router.post("/", async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Usia harus antara 1-120 tahun",
-      });
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Format email tidak valid",
       });
     }
 
@@ -228,15 +203,6 @@ router.post("/", async (req, res) => {
           duplicateField: "nama",
           duplicateValue: req.body.nama,
           duplicateLomba: req.body.jenisLomba,
-        });
-      }
-      // Check if it's a duplicate email
-      if (error.keyPattern && error.keyPattern.email) {
-        return res.status(400).json({
-          success: false,
-          message: "Email sudah terdaftar sebelumnya",
-          duplicateField: "email",
-          duplicateValue: req.body.email,
         });
       }
       // Generic duplicate error

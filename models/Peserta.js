@@ -7,13 +7,6 @@ const pesertaSchema = new mongoose.Schema(
       required: [true, "Nama wajib diisi"],
       trim: true,
     },
-    email: {
-      type: String,
-      required: [true, "Email wajib diisi"],
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
     noTelepon: {
       type: String,
       required: [true, "Nomor telepon wajib diisi"],
@@ -24,11 +17,6 @@ const pesertaSchema = new mongoose.Schema(
       required: [true, "Usia wajib diisi"],
       min: [1, "Usia minimal 1 tahun"],
       max: [120, "Usia maksimal 120 tahun"],
-    },
-    alamat: {
-      type: String,
-      required: [true, "Alamat wajib diisi"],
-      trim: true,
     },
     jenisLomba: {
       type: String,
@@ -64,24 +52,6 @@ const pesertaSchema = new mongoose.Schema(
     catatan: {
       type: String,
       trim: true,
-    },
-    // Field baru untuk sistem turnamen
-    babak: {
-      type: String,
-      enum: ["Penyisihan", "Perempat Final", "Semi Final", "Final"],
-      default: "Penyisihan",
-    },
-    skor: {
-      type: Number,
-      default: 0,
-    },
-    waktuPenyelesaian: {
-      type: Number, // dalam detik
-      default: 0,
-    },
-    ranking: {
-      type: Number,
-      default: 0,
     },
     alasanDiskualifikasi: {
       type: String,
@@ -123,7 +93,7 @@ const pesertaSchema = new mongoose.Schema(
 );
 
 // Index untuk pencarian yang lebih cepat
-pesertaSchema.index({ nama: "text", email: "text" });
+pesertaSchema.index({ nama: "text" });
 
 // Compound unique index untuk nama + jenisLomba (mencegah duplikasi nama dalam lomba yang sama)
 pesertaSchema.index({ nama: 1, jenisLomba: 1 }, { unique: true });
