@@ -49,10 +49,6 @@ const pesertaSchema = new mongoose.Schema(
       ],
       default: "Terdaftar",
     },
-    catatan: {
-      type: String,
-      trim: true,
-    },
     alasanDiskualifikasi: {
       type: String,
       trim: true,

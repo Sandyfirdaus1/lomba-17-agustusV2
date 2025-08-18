@@ -204,6 +204,8 @@ router.post("/", async (req, res) => {
           duplicateValue: req.body.nama,
           duplicateLomba: req.body.jenisLomba,
           duplicateUsia: req.body.usia,
+          // Guidance per policy: same lomba allowed if age differs, otherwise change name
+          hint: "Gunakan usia berbeda untuk lomba yang sama, atau ubah nama jika usia sama.",
         });
       }
 
