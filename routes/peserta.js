@@ -191,12 +191,24 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     if (error.code === 11000) {
-      // Check if it's a duplicate name + lomba combination
-      if (
-        error.keyPattern &&
-        error.keyPattern.nama &&
-        error.keyPattern.jenisLomba
-      ) {
+      // Handle duplicate key error based on unique index
+      const kp = error.keyPattern || {};
+      const kv = error.keyValue || {};
+
+      // New index: nama + jenisLomba + usia
+      if (kp.nama && kp.jenisLomba && kp.usia) {
+        return res.status(400).json({
+          success: false,
+          message: `Nama "${req.body.nama}" sudah terdaftar untuk lomba "${req.body.jenisLomba}" dengan usia ${req.body.usia}`,
+          duplicateField: "nama",
+          duplicateValue: req.body.nama,
+          duplicateLomba: req.body.jenisLomba,
+          duplicateUsia: req.body.usia,
+        });
+      }
+
+      // Backward compatibility: old index nama + jenisLomba
+      if (kp.nama && kp.jenisLomba) {
         return res.status(400).json({
           success: false,
           message: `Nama "${req.body.nama}" sudah terdaftar untuk lomba "${req.body.jenisLomba}"`,
@@ -205,10 +217,12 @@ router.post("/", async (req, res) => {
           duplicateLomba: req.body.jenisLomba,
         });
       }
+
       // Generic duplicate error
       return res.status(400).json({
         success: false,
         message: "Data sudah terdaftar sebelumnya",
+        duplicateKey: kv,
       });
     }
 

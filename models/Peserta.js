@@ -95,7 +95,8 @@ const pesertaSchema = new mongoose.Schema(
 // Index untuk pencarian yang lebih cepat
 pesertaSchema.index({ nama: "text" });
 
-// Compound unique index untuk nama + jenisLomba (mencegah duplikasi nama dalam lomba yang sama)
-pesertaSchema.index({ nama: 1, jenisLomba: 1 }, { unique: true });
+// Compound unique index untuk nama + jenisLomba + usia (hanya blokir jika sama persis)
+// Mengizinkan: nama sama dengan usia berbeda pada lomba yang sama
+pesertaSchema.index({ nama: 1, jenisLomba: 1, usia: 1 }, { unique: true });
 
 module.exports = mongoose.model("Peserta", pesertaSchema);
